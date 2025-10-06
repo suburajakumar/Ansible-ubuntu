@@ -1,6 +1,6 @@
 ---
 - name: Check NTP service status on Ubuntu
-  hosts: your_ubuntu_hosts_group
+  #hosts: your_ubuntu_hosts_group
   become: yes
   tasks:
     - name: Check for chrony service status
