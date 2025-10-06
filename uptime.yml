@@ -1,0 +1,13 @@
+---
+- name: Get uptime from remote host
+  hosts: ubuntu
+  gather_facts: false # Optional, but speeds up execution
+  tasks:
+    - name: Execute the 'uptime' command
+      ansible.builtin.command: /usr/bin/uptime
+      register: uptime_result
+      # Note: The 'command' module is generally preferred for simple commands.
+
+    - name: Display the uptime result
+      ansible.builtin.debug:
+        msg: "Uptime on {{ inventory_hostname }}: {{ uptime_result.stdout }}"
