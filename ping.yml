@@ -1,15 +1,20 @@
 ---
-- name: Ping from Ubuntu Host to a Remote Destination (e.g., 8.8.8.8)
-  hosts: ubuntu # You should define this group in your inventory
+- name: Ping and Display Destination IP
+  hosts: ubuntu_hosts
   gather_facts: false
   
   tasks:
-    - name: 1. Execute ICMP Ping to 8.8.8.8 with 5 packets
+    - name: 1. Execute ICMP Ping to {{ target_ip }}
       ansible.builtin.command:
-        # The '-c 5' option limits the count to 5 packets on Linux
-        cmd: ping -c 5 8.8.8.8 
+        # Use the variable in the command
+        cmd: "ping -c 5 {{ target_ip }}" 
       register: ping_result
 
-    - name: 2. Display Ping Results
+    - name: 2. Display the Ping Destination
       ansible.builtin.debug:
-        msg: "Ping results from {{ inventory_hostname }}:\n{{ ping_result.stdout }}"
+        # 🔑 Access the variable directly in the debug message
+        msg: "The destination IP being pinged by {{ inventory_hostname }} is: {{ target_ip }}"
+
+    - name: 3. Display Ping Output
+      ansible.builtin.debug:
+        msg: "Output: \n{{ ping_result.stdout }}"
