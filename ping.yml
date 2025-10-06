@@ -1,6 +1,6 @@
 ---
 - name: Ping and Display Destination IP
-  hosts: ubuntu_hosts
+  hosts: ubuntu
   gather_facts: false
   
   tasks:
