@@ -1,45 +1,12 @@
 ---
-- name: Check NTP service status on Ubuntu
+- name: Check timedatectl status
   hosts: ubuntu
-  become: yes
+  become: true
   tasks:
-    - name: Check for chrony service status
-      ansible.builtin.command: systemctl status chrony.service
-      register: chrony_status
-      ignore_errors: yes
+    - name: Run timedatectl status
+      ansible.builtin.command: timedatectl
+      register: timedatectl_status
 
-    - name: Display chrony service status (if found)
-      ansible.builtin.debug:
-        msg: "{{ chrony_status.stdout_lines }}"
-      when: chrony_status is success and chrony_status.stdout != ''
-
-    - name: Check chrony synchronization status
-      ansible.builtin.command: chronyc tracking
-      register: chronyc_tracking
-      ignore_errors: yes
-      when: chrony_status is success
-
-    - name: Display chrony tracking status (if found)
-      ansible.builtin.debug:
-        msg: "{{ chronyc_tracking.stdout_lines }}"
-      when: chronyc_tracking is success
-
-    - name: Check for systemd-timesyncd service status
-      ansible.builtin.command: systemctl status systemd-timesyncd.service
-      register: timesyncd_status
-      ignore_errors: yes
-
-    - name: Display systemd-timesyncd status (if found)
-      ansible.builtin.debug:
-        msg: "{{ timesyncd_status.stdout_lines }}"
-      when: timesyncd_status is success and timesyncd_status.stdout != ''
-
-    - name: Check for traditional ntpd service status
-      ansible.builtin.command: systemctl status ntp.service
-      register: ntp_status
-      ignore_errors: yes
-
-    - name: Display ntpd service status (if found)
-      ansible.builtin.debug:
-        msg: "{{ ntp_status.stdout_lines }}"
-      when: ntp_status is success and ntp_status.stdout != ''
+    - name: Show timedatectl status output
+      debug:
+        var: timedatectl_status.stdout
